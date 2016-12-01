@@ -37,20 +37,42 @@ class RadioGroup extends React.Component {
     defaultValue: PropTypes.string
   }
 
-  render() {
-    return <div>{this.props.children}</div>
-  }
-}
-
-class RadioOption extends React.Component {
-  static propTypes = {
-    value: PropTypes.string
+  constructor(props) {
+    super();
+    this.state = {
+      selectedValue: props.defaultValue,
+    };
   }
 
   render() {
     return (
       <div>
-        <RadioIcon isSelected={false}/> {this.props.children}
+        {React.Children.map(this.props.children, (child, index) => {
+          return React.cloneElement(child, {
+            isSelected: child.props.value === this.state.selectedValue,
+            onClick: () => this.setState({ selectedValue: child.props.value }),
+          });
+        })}
+      </div>
+    );
+  }
+}
+
+class RadioOption extends React.Component {
+  static propTypes = {
+    isSelected: PropTypes.bool,
+    onClick: PropTypes.func,
+    value: PropTypes.string.isRequired,
+  }
+
+  render() {
+    return (
+      <div>
+        <RadioIcon
+          onClick={this.props.onClick}
+          isSelected={this.props.isSelected}
+        />
+        {this.props.children}
       </div>
     )
   }
@@ -58,12 +80,14 @@ class RadioOption extends React.Component {
 
 class RadioIcon extends React.Component {
   static propTypes = {
-    isSelected: PropTypes.bool.isRequired
+    isSelected: PropTypes.bool.isRequired,
+    onClick: PropTypes.func.isRequired,
   }
 
   render() {
     return (
       <div
+        onClick={this.props.onClick}
         style={{
           borderColor: '#ccc',
           borderSize: '3px',
@@ -72,7 +96,7 @@ class RadioIcon extends React.Component {
           width: 16,
           display: 'inline-block',
           cursor: 'pointer',
-          background: this.props.isSelected ? 'rgba(0, 0, 0, 0.05)' : ''
+          background: this.props.isSelected ? 'black' : ''
         }}
       />
     )
@@ -80,6 +104,7 @@ class RadioIcon extends React.Component {
 }
 
 class App extends React.Component {
+
   render() {
     return (
       <div>

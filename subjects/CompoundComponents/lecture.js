@@ -506,6 +506,8 @@ render(<App/>, document.getElementById('app'))
 //  }
 //})
 //
+// // USING DATATABS TAKES ADVANTAGE OF THE OLD API WHILE STILL ALLOWING YOU
+// // TO HAVE A NICE NEW CompoundCompnent API - using dataTabs as the mapper
 //const App = React.createClass({
 //  render() {
 //    const tabData = [

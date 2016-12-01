@@ -21,24 +21,61 @@ import React from 'react'
 import { render } from 'react-dom'
 
 class Form extends React.Component {
+  static propTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+  }
+
+  static childContextTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  }
+
+  getChildContext() {
+    return {
+      onSubmit: this.props.onSubmit,
+      onChange: this.onChange,
+    }
+  }
+
+  onChange(e) {
+    console.log('onChange', e.target.value);
+  }
+
   render() {
     return <div>{this.props.children}</div>
   }
 }
 
 class SubmitButton extends React.Component {
+  static contextTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+  }
+
   render() {
-    return <button>{this.props.children}</button>
+    return (
+      <button onClick={this.context.onSubmit}>{this.props.children}</button>
+    )
   }
 }
 
 class TextInput extends React.Component {
+  static contextTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+    onChange: React.PropTypes.func.isRequired,
+  }
+
   render() {
     return (
       <input
         type="text"
         name={this.props.name}
         placeholder={this.props.placeholder}
+        onChange={this.context.onChange}
+        onKeyDown={(e) => {
+          if (e.keyCode === 13) {
+            this.context.onSubmit()
+          }
+        }}
       />
     )
   }
