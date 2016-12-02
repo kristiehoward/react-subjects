@@ -41,13 +41,24 @@ class RainbowList extends React.Component {
   componentDidMount() {
     this.setState({
       availableHeight: this.node.offsetHeight,
-    })
+    });
+    window.addEventListener('resize', this.onWindowResize);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onWindowResize);
   }
 
   onScroll = (e) => {
     this.setState({
       scrollTop: e.target.scrollTop,
     });
+  }
+
+  onWindowResize = () => {
+    this.setState({
+      availableHeight: this.node.offsetHeight,
+    })
   }
 
   render() {
