@@ -16,7 +16,7 @@ export default function createStore(reducer) {
       events.emit(CHANGE)
     },
 
-    listen(listener) {
+    subscribe(listener) {
       events.on(CHANGE, listener)
     },
 
